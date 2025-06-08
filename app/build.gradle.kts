@@ -12,6 +12,9 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation(libs.junit.jupiter.engine)
+    implementation(libs.apache.math)
+    implementation(libs.multik.core)
+    implementation(libs.multik.default)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
