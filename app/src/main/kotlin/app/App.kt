@@ -20,7 +20,7 @@ fun main() {
     val grid = Grid(a, b, gridSize)
 
     val kernel = Kernel({ x -> sin(x) }, { x -> cos(x) })
-    val f = { x: Double -> kotlin.math.sin(x) }
+    val f = { x: Double -> sin(x) }
     // u(t) - [integral from a to b (K(t,x) * u(x) dx)] = sint
     val fredholm = Fredholm(kernel, f)
 
@@ -33,7 +33,7 @@ fun main() {
             1e-5,
             1e-5,
         )
-    // Functions w_tilda_j(t) = Kappa w_j(t) = [integral from a to b (K(t,x) * w_j(x) dx)], j=-2..n-1
+    // Functions w~_j(t) = Kappa w_j(t) = [integral from a to b (K(t,x) * w_j(x) dx)], j=-2..n-1
     val wsTilda =
         ws.map { w ->
             val intergralKappaWj =
@@ -46,7 +46,7 @@ fun main() {
     val mu =
         (-2..<grid.n).map { j -> apprFuncs.muApproximation(fredholm.f, j) }.let { mk.ndarray(it) }
 
-    // Matrix M, where M_(i,j) = mu_Y_j(w_tilda_i)
+    // Matrix M, where M_(i,j) = mu_Y_j(w~_i)
     val M =
         List(grid.n + 2) { j ->
             List(grid.n + 2) { i ->
@@ -62,11 +62,11 @@ fun main() {
     val uAppr =
         { x: Double -> fredholm.f(x) + c.toList().zip(wsTilda).sumOf { (c, g) -> c * g(x) } }
 
-    val sinTwice = { x: Double -> 2 * kotlin.math.sin(x) }
+    val sinTwice = { x: Double -> 2 * sin(x) }
     println("Approximation error = ${kotlin.math.abs(sinTwice(kotlin.math.PI / 4.0) - uAppr(kotlin.math.PI / 4.0))}")
 }
 
 // For simplicity, we assume that the kernel function is separable
-class Kernel(val kt: (Double) -> Double, val kx: (Double) -> Double)
+data class Kernel(val kt: (Double) -> Double, val kx: (Double) -> Double)
 
-class Fredholm(val ker: Kernel, val f: (Double) -> Double)
+data class Fredholm(val ker: Kernel, val f: (Double) -> Double)
