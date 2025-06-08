@@ -10,15 +10,21 @@ import org.jetbrains.kotlinx.multik.api.ndarray
 import org.jetbrains.kotlinx.multik.ndarray.operations.minus
 import org.jetbrains.kotlinx.multik.ndarray.operations.toList
 
+/*
+ * Type of approximation functionals to use.
+ */
 enum class ApprFunctional {
     GREVILLE,
     MU,
 }
 
-// For simplicity, we assume that the kernel function is separable
-class Kernel(val kt: (Double) -> Double, val kx: (Double) -> Double)
-
-class Fredholm(val ker: Kernel, val f: (Double) -> Double) {
+/**
+ * Solves the Fredholm integral equation of the second kind:
+ * u(t) = f(t) + ∫ K(t, x) * u(x) dx
+ *
+ * The kernel function must take arguments in the order: (t, x)
+ */
+class Fredholm(val ker: (Double) -> (Double) -> Double, val f: (Double) -> Double) {
     fun solve(
         grid: Grid,
         apprFunc: ApprFunctional,
@@ -38,9 +44,9 @@ class Fredholm(val ker: Kernel, val f: (Double) -> Double) {
         // Functions w~_j(t) = Kappa w_j(t) = [integral from a to b (K(t,x) * w_j(x) dx)], j=-2..n-1
         val wsTilda =
             ws.map { w ->
-                val intergralKappaWj =
-                    integrator.integrate(10000, { x -> ker.kx(x) * w(x) }, a, b);
-                { t: Double -> ker.kt(t) * intergralKappaWj }
+                { t: Double ->
+                    integrator.integrate(10000, { x -> ker(t)(x) * w(x) }, a, b)
+                }
             }
 
         val apprFuncs = QuadrApprFuncs(grid)

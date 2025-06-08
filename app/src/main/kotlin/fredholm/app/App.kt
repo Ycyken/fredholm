@@ -3,7 +3,6 @@ package fredholm.app
 import fredholm.ApprFunctional
 import fredholm.Fredholm
 import fredholm.Grid
-import fredholm.Kernel
 import fredholm.approxError
 import kotlin.math.cos
 import kotlin.math.sin
@@ -32,7 +31,7 @@ fun printExperimentTable(
         print(method.name.padEnd(12))
         gridSizes.forEach { gridSize ->
             val grid = Grid(a, b, gridSize)
-            val kernel = Kernel({ x -> sin(x) }, { x -> cos(x) })
+            val kernel = { t: Double -> { x: Double -> sin(t) * cos(x) } }
             val f = { x: Double -> sin(x) }
 
             // u(t) - [integral from a to b (K(t,x) * u(x) dx)] = sint
