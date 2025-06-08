@@ -43,7 +43,12 @@ class Fredholm(val ker: Kernel, val f: (Double) -> Double) {
         val apprFuncs = QuadrApprFuncs(grid)
         // Vector of mu_j_Y(f), j=-2..n-1
         val mu =
-            (-2..<grid.n).map { j -> apprFuncs.muApproximation(f, j) }.let { mk.ndarray(it) }
+            (-2..<grid.n).map { j ->
+                when (apprFunc) {
+                    ApprFunctional.MU -> apprFuncs.muApproximation(f, j)
+                    ApprFunctional.GREVILLE -> apprFuncs.grevilleApproximation(f, j)
+                }
+            }.let { mk.ndarray(it) }
 
         // Matrix M, where M_(i,j) = mu_Y_j(w~_i)
         val M =
