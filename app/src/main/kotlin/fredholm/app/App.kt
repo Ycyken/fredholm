@@ -1,6 +1,10 @@
 package fredholm.app
 
-import fredholm.*
+import fredholm.ApprFunctional
+import fredholm.Fredholm
+import fredholm.Grid
+import fredholm.Kernel
+import fredholm.approxError
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -12,7 +16,11 @@ fun main() {
     printExperimentTable(gridSizes, apprFuncs, interval)
 }
 
-fun printExperimentTable(gridSizes: List<Int>, apprFuncs: List<ApprFunctional>, interval: Pair<Double, Double>) {
+fun printExperimentTable(
+    gridSizes: List<Int>,
+    apprFuncs: List<ApprFunctional>,
+    interval: Pair<Double, Double>,
+) {
     val a = interval.first
     val b = interval.second
 
@@ -38,5 +46,3 @@ fun printExperimentTable(gridSizes: List<Int>, apprFuncs: List<ApprFunctional>, 
         println()
     }
 }
-
-

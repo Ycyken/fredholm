@@ -11,15 +11,18 @@ import org.jetbrains.kotlinx.multik.ndarray.operations.minus
 import org.jetbrains.kotlinx.multik.ndarray.operations.toList
 
 enum class ApprFunctional {
-    GREVILLE, MU
+    GREVILLE,
+    MU,
 }
 
 // For simplicity, we assume that the kernel function is separable
 class Kernel(val kt: (Double) -> Double, val kx: (Double) -> Double)
 
 class Fredholm(val ker: Kernel, val f: (Double) -> Double) {
-
-    fun solve(grid: Grid, apprFunc: ApprFunctional): (Double) -> Double {
+    fun solve(
+        grid: Grid,
+        apprFunc: ApprFunctional,
+    ): (Double) -> Double {
         val a = grid[0]
         val b = grid[grid.n]
 
