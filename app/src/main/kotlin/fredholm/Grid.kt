@@ -1,3 +1,5 @@
+package fredholm
+
 class Grid(a: Double, b: Double, size: Int) {
     private val grid: DoubleArray
     val n: Int

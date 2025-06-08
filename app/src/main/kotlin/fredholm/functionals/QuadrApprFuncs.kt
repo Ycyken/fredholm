@@ -1,6 +1,6 @@
-package functionals
+package fredholm.functionals
 
-import Grid
+import fredholm.Grid
 
 class QuadrApprFuncs(private val grid: Grid) {
     private val theta = 0.5

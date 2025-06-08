@@ -1,6 +1,6 @@
-package functionals
+package fredholm.functionals
 
-import Grid
+import fredholm.Grid
 import kotlin.math.pow
 
 class QuadraticBSplineBasis(private val grid: Grid) {

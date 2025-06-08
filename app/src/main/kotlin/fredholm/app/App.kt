@@ -1,8 +1,11 @@
-package app
+package fredholm.app
 
-import Grid
-import functionals.QuadrApprFuncs
-import functionals.QuadraticBSplineBasis
+import fredholm.Fredholm
+import fredholm.Grid
+import fredholm.Kernel
+import fredholm.approxError
+import fredholm.functionals.QuadrApprFuncs
+import fredholm.functionals.QuadraticBSplineBasis
 import org.apache.commons.math3.analysis.integration.IterativeLegendreGaussIntegrator
 import org.jetbrains.kotlinx.multik.api.identity
 import org.jetbrains.kotlinx.multik.api.linalg.solve
@@ -63,10 +66,8 @@ fun main() {
         { x: Double -> fredholm.f(x) + c.toList().zip(wsTilda).sumOf { (c, g) -> c * g(x) } }
 
     val sinTwice = { x: Double -> 2 * sin(x) }
-    println("Approximation error = ${kotlin.math.abs(sinTwice(kotlin.math.PI / 4.0) - uAppr(kotlin.math.PI / 4.0))}")
+    val err = approxError(sinTwice, uAppr, Grid(a, b, gridSize * 10))
+    println(err)
 }
 
-// For simplicity, we assume that the kernel function is separable
-data class Kernel(val kt: (Double) -> Double, val kx: (Double) -> Double)
 
-data class Fredholm(val ker: Kernel, val f: (Double) -> Double)
